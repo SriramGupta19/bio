@@ -135,20 +135,20 @@
   .proj-body > div{ overflow:hidden; }
   .proj-body p{ padding:0 20px 18px; font-size:.86rem; color:var(--muted); line-height:1.7; }
 
-    /* timeline */
+      /* timeline */
   .timeline{ list-style:none; position:relative; padding-left:32px; }
   .timeline::before{
-    content:""; position:absolute; left:6.5px; top:8px; bottom:8px; width:2px; background:var(--line);
+    content:""; position:absolute; left:13px; top:8px; bottom:8px; width:2px; background:var(--line);
   }
   .timeline::after{
-    content:""; position:absolute; left:6.5px; top:8px; bottom:8px; width:2px; background:var(--accent);
+    content:""; position:absolute; left:13px; top:8px; bottom:8px; width:2px; background:var(--accent);
     transform:scaleY(0); transform-origin:top; transition:transform 1.4s cubic-bezier(.2,.8,.2,1);
   }
   .reveal.in .timeline::after{ transform:scaleY(1); }
   .tl{ position:relative; padding:0 0 28px; }
   .tl:last-child{ padding-bottom:0; }
   .tl::before{
-    content:""; position:absolute; left:-25.5px; top:6px; width:14px; height:14px; border-radius:50%;
+    content:""; position:absolute; left:-25px; top:6px; width:14px; height:14px; border-radius:50%;
     background:var(--bg); border:2px solid var(--accent);
   }
   .tl:first-child::before{ background:var(--accent); }
