@@ -98,6 +98,10 @@
   .fact .k{ font-size:.7rem; color:var(--muted); letter-spacing:.4px; }
   .fact .v{ font-size:.95rem; font-weight:600; margin-top:4px; }
 
+  /* clickable fact card (used for the photography link) */
+  a.fact{ display:flex; flex-direction:column; justify-content:center; cursor:pointer; }
+  a.fact .v{ display:flex; align-items:center; gap:6px; color:var(--accent); }
+
   /* chips */
   .group + .group{ margin-top:22px; }
   .group-label{ font-size:.72rem; color:var(--muted); font-weight:600; letter-spacing:.8px; text-transform:uppercase; margin-bottom:10px; }
@@ -479,6 +483,10 @@ bodies.overview.innerHTML = `
     <div class="fact"><div class="k">Masters</div><div class="v">M.Tech — NIT Calicut</div></div>
     <div class="fact"><div class="k">Bachelors</div><div class="v">B.Tech — Amrita Vishwa Vidyapeetham</div></div>
     <div class="fact"><div class="k">Interests</div><div class="v">Controls · Robotics · Power</div></div>
+    <a class="fact" href="https://sriramgupta19.github.io/fotos/" target="_blank" rel="noopener noreferrer">
+      <div class="k">Photography</div>
+      <div class="v">View portfolio ↗</div>
+    </a>
   </div>`;
 
 /* ===== 02 SKILLS ===== */
