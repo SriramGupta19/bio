@@ -98,10 +98,6 @@
   .fact .k{ font-size:.7rem; color:var(--muted); letter-spacing:.4px; }
   .fact .v{ font-size:.95rem; font-weight:600; margin-top:4px; }
 
-  /* clickable fact card (used for the photography link) */
-  a.fact{ display:flex; flex-direction:column; justify-content:center; cursor:pointer; }
-  a.fact .v{ display:flex; align-items:center; gap:6px; color:var(--accent); }
-
   /* chips */
   .group + .group{ margin-top:22px; }
   .group-label{ font-size:.72rem; color:var(--muted); font-weight:600; letter-spacing:.8px; text-transform:uppercase; margin-bottom:10px; }
@@ -111,6 +107,10 @@
     font-size:.84rem; transition:all .2s; cursor:default;
   }
   .chip:hover{ background:var(--accent-soft); border-color:var(--accent); color:var(--accent); transform:translateY(-2px); }
+
+  /* link chips (creative work) */
+  .chip-link{ color:var(--accent); border-color:var(--accent); cursor:pointer; }
+  .chip-link:hover{ background:var(--accent); color:var(--on-accent); }
 
   /* toolbar + filters */
   .toolbar{ display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; gap:10px; }
@@ -135,7 +135,7 @@
   .proj-body > div{ overflow:hidden; }
   .proj-body p{ padding:0 20px 18px; font-size:.86rem; color:var(--muted); line-height:1.7; }
 
-      /* timeline */
+  /* timeline */
   .timeline{ list-style:none; position:relative; padding-left:32px; }
   .timeline::before{
     content:""; position:absolute; left:13px; top:8px; bottom:8px; width:2px; background:var(--line);
@@ -305,9 +305,10 @@ addEventListener('scroll', onScroll, {passive:true}); onScroll();
 /* ===== SECTIONS ===== */
 const stations = [
   { id:"overview", name:"Overview", desc:"Who, what, where" },
-  { id:"skills", name:"Skills", desc:"Languages, tools, platforms" },
+  { id:"skills", name:"Skills", desc:"Languages, tools, platforms, creative work" },
   { id:"projects", name:"Projects", desc:"Case files, open to read" },
-  { id:"experience", name:"Experience", desc:"Work and education, in order" },
+  { id:"experience", name:"Experience", desc:"Where I work" },
+  { id:"education", name:"Education", desc:"Degrees and schooling, in order" },
   { id:"certifications", name:"Certifications", desc:"Short course records" },
   { id:"achievements", name:"Achievements", desc:"Filed by category" },
   { id:"activities", name:"Activities", desc:"Searchable roles log" },
@@ -372,13 +373,17 @@ const projects = [
   { title:"Color Sense Bot", date:"Apr 2023 – May 2023", desc:"3-wheel robot using PIC16F877A and TCS3200 sensor, responding to color cards." },
   { title:"Live-in-Labs: Infrastructure at Dalapur, UP", date:"Feb 2023 – Aug 2023", desc:"Rural development initiative using Participatory Rural Appraisal (PRA) tools." },
 ];
-const timelineData = [
+
+const experienceData = [
   { date:"Jul 2026 – Present", role:"Edison Engineer — Gas Power Engineering", org:"GE Vernova, HTC, India" },
+];
+const educationData = [
   { date:"2024 – 2026", role:"M.Tech, Industrial Power & Automation", org:"NIT Calicut · CGPA 9.88/10 · Gold Medalist" },
   { date:"2020 – 2024", role:"B.Tech, Electrical and Electronics Engineering", org:"Amrita School of Engineering · CGPA 9.47/10 · Gold Medalist, Best Outgoing Student" },
   { date:"Jun 2020", role:"Higher Secondary Certificate", org:"FIITJEE Junior College, Hyderabad · 91.4%" },
   { date:"May 2018", role:"Secondary School Certificate", org:"St. Joseph's School, Hyderabad · 87%" },
 ];
+
 const certs = [
   { title:"Designing with Flexibility & Efficiency in Mind", issuer:"GE Vernova", date:"Oct 2026" },
   { title:"Automated Testing for Python", issuer:"GE Vernova", date:"Sep 2026" },
@@ -485,14 +490,6 @@ bodies.overview.innerHTML = `
     <div class="fact"><div class="k">Master's</div><div class="v">M.Tech — NIT Calicut</div></div>
     <div class="fact"><div class="k">Bachelor's</div><div class="v">B.Tech — Amrita Vishwa Vidyapeetham</div></div>
     <div class="fact"><div class="k">Interests</div><div class="v">Controls · Robotics · Power</div></div>
-    <a class="fact" href="https://sriramgupta19.github.io/fotos/" target="_blank" rel="noopener noreferrer">
-      <div class="k">Photography</div>
-      <div class="v">View portfolio ↗</div>
-    </a>
-    <a class="fact" href="https://sites.google.com/view/msrgpt/design-work" target="_blank" rel="noopener noreferrer">
-      <div class="k">Design</div>
-      <div class="v">View work ↗</div>
-    </a>
   </div>`;
 
 /* ===== 02 SKILLS ===== */
@@ -501,9 +498,17 @@ const skillGroups = [
   ["Tools", ["MATLAB","LabVIEW","ROS2","Gazebo"]],
   ["Platforms", ["Arduino","Raspberry Pi","Pico","ESP8266","ESP32","Ubuntu"]],
   ["Programs", ["NVIDIA Developer","Arm Developer"]],
+  ["Creative", [
+    { label:"Graphic Design", url:"https://sites.google.com/view/msrgpt/design-work" },
+    { label:"Photography", url:"https://sriramgupta19.github.io/fotos/" },
+  ]],
 ];
 bodies.skills.innerHTML = skillGroups.map(([label, items]) =>
-  `<div class="group"><div class="group-label">${label}</div><div class="chips">${items.map(x=>`<span class="chip">${esc(x)}</span>`).join('')}</div></div>`
+  `<div class="group"><div class="group-label">${label}</div><div class="chips">${items.map(x =>
+    typeof x === 'string'
+      ? `<span class="chip">${esc(x)}</span>`
+      : `<a class="chip chip-link" href="${x.url}" target="_blank" rel="noopener noreferrer">${esc(x.label)} ↗</a>`
+  ).join('')}</div></div>`
 ).join('');
 
 /* ===== 03 PROJECTS ===== */
@@ -547,15 +552,18 @@ bodies.skills.innerHTML = skillGroups.map(([label, items]) =>
   });
 })();
 
-/* ===== 04 EXPERIENCE ===== */
-bodies.experience.innerHTML = `<ol class="timeline">${timelineData.map(t=>`
+/* ===== 04 EXPERIENCE & 05 EDUCATION ===== */
+const renderTimeline = data => `<ol class="timeline">${data.map(t=>`
   <li class="tl"><div class="tl-date">${esc(t.date)}</div><div class="tl-role">${esc(t.role)}</div><div class="tl-org">${esc(t.org)}</div></li>`).join('')}</ol>`;
 
-/* ===== 05 CERTIFICATIONS ===== */
+bodies.experience.innerHTML = renderTimeline(experienceData);
+bodies.education.innerHTML  = renderTimeline(educationData);
+
+/* ===== 06 CERTIFICATIONS ===== */
 bodies.certifications.innerHTML = `<div class="card pad">${certs.map(c=>`
   <div class="row"><div><div class="t">${esc(c.title)}</div><div class="s">${esc(c.issuer)}</div></div><div class="d">${esc(c.date)}</div></div>`).join('')}</div>`;
 
-/* ===== 06 ACHIEVEMENTS ===== */
+/* ===== 07 ACHIEVEMENTS ===== */
 (function(){
   const c = bodies.achievements;
   const list = document.createElement('div');
@@ -569,7 +577,7 @@ bodies.certifications.innerHTML = `<div class="card pad">${certs.map(c=>`
   render('All');
 })();
 
-/* ===== 07 ACTIVITIES ===== */
+/* ===== 08 ACTIVITIES ===== */
 (function(){
   const c = bodies.activities;
   const PAGE = 12;
@@ -603,7 +611,7 @@ bodies.certifications.innerHTML = `<div class="card pad">${certs.map(c=>`
   render();
 })();
 
-/* ===== 08 LANGUAGES ===== */
+/* ===== 09 LANGUAGES ===== */
 bodies.languages.innerHTML = `
   <div class="card lang">
     <h3>German — Level 3 of 6</h3>
@@ -612,7 +620,7 @@ bodies.languages.innerHTML = `
     <div class="levels"><i></i><i></i><i></i></div>
   </div>`;
 
-/* ===== 09 NOTE ===== */
+/* ===== 10 NOTE ===== */
 bodies.note.innerHTML = `
   <div class="card note"><p>This page purposely has no contact information because I prefer mystery. If you really need to find me, you'll have to try the old-fashioned way: manifest it into the universe and hope it works.</p></div>`;
 </script>
