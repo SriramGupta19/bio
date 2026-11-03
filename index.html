@@ -138,10 +138,10 @@
   /* timeline */
   .timeline{ list-style:none; position:relative; padding-left:32px; }
   .timeline::before{
-    content:""; position:absolute; left:13px; top:8px; bottom:8px; width:2px; background:var(--line);
+    content:""; position:absolute; left:15px; top:8px; bottom:8px; width:2px; background:var(--line);
   }
   .timeline::after{
-    content:""; position:absolute; left:13px; top:8px; bottom:8px; width:2px; background:var(--accent);
+    content:""; position:absolute; left:15px; top:8px; bottom:8px; width:2px; background:var(--accent);
     transform:scaleY(0); transform-origin:top; transition:transform 1.4s cubic-bezier(.2,.8,.2,1);
   }
   .reveal.in .timeline::after{ transform:scaleY(1); }
