@@ -155,6 +155,7 @@
   .tl-date{ font-size:.74rem; color:var(--accent); font-weight:600; }
   .tl-role{ font-size:1rem; font-weight:600; margin-top:3px; line-height:1.4; }
   .tl-org{ font-size:.84rem; color:var(--muted); margin-top:3px; line-height:1.55; }
+  .tl-desc{ font-size:.82rem; color:var(--muted); margin-top:6px; line-height:1.6; max-width:55ch; }
 
   /* rows */
   .row{ display:flex; justify-content:space-between; gap:16px; padding:15px 0; border-bottom:1px solid var(--line); align-items:baseline; }
@@ -375,7 +376,12 @@ const projects = [
 ];
 
 const experienceData = [
-  { date:"Jul 2026 – Present", role:"Edison Engineer — Gas Power Engineering", org:"GE Vernova, HTC, India" },
+  { 
+    date:"Jul 2026 – Present", 
+    role:"Edison Engineer — Gas Power Engineering", 
+    org:"GE Vernova, HTC, India",
+    desc:"Rotational program focused on gas turbine engineering, covering design,\n performance, and controls across multiple engineering functions." 
+  },
 ];
 const educationData = [
   { date:"2024 – 2026", role:"M.Tech, Industrial Power & Automation", org:"NIT Calicut · CGPA 9.88/10 · Gold Medalist" },
@@ -554,8 +560,13 @@ bodies.skills.innerHTML = skillGroups.map(([label, items]) =>
 
 /* ===== 04 EXPERIENCE & 05 EDUCATION ===== */
 const renderTimeline = data => `<ol class="timeline">${data.map(t=>`
-  <li class="tl"><div class="tl-date">${esc(t.date)}</div><div class="tl-role">${esc(t.role)}</div><div class="tl-org">${esc(t.org)}</div></li>`).join('')}</ol>`;
-
+  <li class="tl">
+    <div class="tl-date">${esc(t.date)}</div>
+    <div class="tl-role">${esc(t.role)}</div>
+    <div class="tl-org">${esc(t.org)}</div>
+    ${t.desc ? `<div class="tl-desc">${esc(t.desc)}</div>` : ''}
+  </li>`).join('')}</ol>`;
+  
 bodies.experience.innerHTML = renderTimeline(experienceData);
 bodies.education.innerHTML  = renderTimeline(educationData);
 
