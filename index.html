@@ -19,51 +19,85 @@
     --on-accent:#0d1211;
     --shadow:0 1px 2px rgba(0,0,0,.3), 0 10px 28px -14px rgba(0,0,0,.5);
     --sans:-apple-system,BlinkMacSystemFont,'Segoe UI','Inter','Roboto','Helvetica Neue',Arial,sans-serif;
-    --side:280px;
-    --offset:28px;
+    --topbar:64px;
+    --drawer:300px;
   }
 
   *{ margin:0; padding:0; box-sizing:border-box; font-family:var(--sans); }
-  html{ scroll-behavior:smooth; -webkit-text-size-adjust:100%; background:var(--bg); }
-  body{ background:var(--bg); color:var(--ink); line-height:1.5; }
+  html{ background:var(--bg); -webkit-text-size-adjust:100%; }
+  body{ background:var(--bg); color:var(--ink); line-height:1.5; overflow-x:hidden; }
   ::selection{ background:var(--accent); color:var(--on-accent); }
   button{ color:inherit; background:none; border:none; cursor:pointer; font:inherit; }
   a{ color:inherit; text-decoration:none; }
   :focus-visible{ outline:2px solid var(--accent); outline-offset:3px; border-radius:6px; }
 
-  /* scroll progress */
-  .progress{ position:fixed; top:0; left:0; right:0; height:3px; z-index:100; background:transparent; pointer-events:none; }
-  .progress i{ display:block; height:100%; background:var(--accent); transform:scaleX(0); transform-origin:left; }
-
-  /* ===== SHELL ===== */
-  .shell{ display:grid; grid-template-columns:var(--side) minmax(0,1fr); min-height:100vh; }
-
-  /* ===== SIDEBAR ===== */
-  .side{
-    position:sticky; top:0; height:100vh; padding:40px 26px 28px;
-    display:flex; flex-direction:column; border-right:1px solid var(--line);
+  /* ===== TOP BAR ===== */
+  .topbar{
+    position:fixed; top:0; left:0; right:0; height:var(--topbar); z-index:70;
+    display:flex; align-items:center; gap:14px; padding:0 20px;
+    background:color-mix(in srgb, var(--bg) 86%, transparent);
+    -webkit-backdrop-filter:blur(14px); backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--line);
   }
-  .brand{ display:flex; align-items:center; gap:14px; }
+  .menu-btn{
+    width:40px; height:40px; border-radius:10px; display:grid; place-items:center;
+    background:var(--surface); border:1px solid var(--line); flex-shrink:0; transition:border-color .2s, background .2s;
+  }
+  .menu-btn:hover{ border-color:var(--accent); }
+  .menu-btn svg{ width:18px; height:18px; }
+  .menu-btn .bars{ display:flex; flex-direction:column; gap:4px; width:18px; }
+  .menu-btn .bars i{ display:block; height:2px; background:var(--ink); border-radius:2px; transition:transform .25s, opacity .25s; }
+  .menu-btn.open .bars i:nth-child(1){ transform:translateY(6px) rotate(45deg); }
+  .menu-btn.open .bars i:nth-child(2){ opacity:0; }
+  .menu-btn.open .bars i:nth-child(3){ transform:translateY(-6px) rotate(-45deg); }
+
+  .tb-brand{ display:flex; align-items:center; gap:11px; cursor:pointer; }
   .avatar{
-    width:52px; height:52px; border-radius:50%; flex-shrink:0; display:grid; place-items:center;
-    background:var(--accent-soft); color:var(--accent); font-weight:700; font-size:1rem; letter-spacing:.5px;
+    width:34px; height:34px; border-radius:50%; flex-shrink:0; display:grid; place-items:center;
+    background:var(--accent-soft); color:var(--accent); font-weight:700; font-size:.78rem; letter-spacing:.5px;
   }
-  .b-name{ font-weight:650; font-size:1rem; letter-spacing:-.01em; }
-  .b-role{ font-size:.76rem; color:var(--muted); margin-top:2px; }
+  .tb-name{ font-weight:650; font-size:.92rem; letter-spacing:-.01em; }
+  .tb-role{ font-size:.68rem; color:var(--muted); margin-top:1px; }
 
-  .nav{ margin-top:38px; display:flex; flex-direction:column; gap:2px; flex:1; overflow-y:auto; }
-  .nav a{
-    display:flex; align-items:center; gap:12px; padding:9px 12px; border-radius:10px;
-    font-size:.88rem; color:var(--muted); transition:background .2s, color .2s;
+  .tb-crumb{ margin-left:auto; font-size:.76rem; color:var(--muted); display:flex; align-items:center; gap:6px; }
+  .tb-crumb strong{ color:var(--accent); font-weight:600; }
+
+  /* ===== DRAWER ===== */
+  .scrim{
+    position:fixed; inset:0; z-index:65; background:rgba(0,0,0,.55);
+    opacity:0; pointer-events:none; transition:opacity .25s;
   }
-  .nav a .n{ font-size:.68rem; width:18px; opacity:.7; font-variant-numeric:tabular-nums; }
-  .nav a:hover{ background:var(--soft); color:var(--ink); }
-  .nav a.active{ background:var(--accent-soft); color:var(--accent); font-weight:600; }
+  .scrim.show{ opacity:1; pointer-events:auto; }
+
+  .drawer{
+    position:fixed; top:0; left:0; height:100vh; width:min(var(--drawer),86vw); z-index:68;
+    background:var(--surface); border-right:1px solid var(--line);
+    transform:translateX(-100%); transition:transform .3s cubic-bezier(.2,.8,.2,1);
+    display:flex; flex-direction:column; padding:22px 18px; padding-top:calc(var(--topbar) + 14px);
+  }
+  .drawer.open{ transform:translateX(0); }
+  .drawer-title{ font-size:.7rem; color:var(--muted); font-weight:700; letter-spacing:1.2px; text-transform:uppercase; margin:10px 10px 8px; }
+  .drawer-nav{ display:flex; flex-direction:column; gap:2px; overflow-y:auto; }
+  .drawer-nav a{
+    display:flex; align-items:center; gap:12px; padding:11px 12px; border-radius:10px;
+    font-size:.9rem; color:var(--muted); transition:background .2s, color .2s;
+  }
+  .drawer-nav a .n{ font-size:.68rem; width:18px; opacity:.7; font-variant-numeric:tabular-nums; }
+  .drawer-nav a:hover{ background:var(--soft); color:var(--ink); }
+  .drawer-nav a.active{ background:var(--accent-soft); color:var(--accent); font-weight:600; }
+  .drawer-nav .home-link{ margin-bottom:8px; border-bottom:1px solid var(--line); border-radius:10px 10px 0 0; padding-bottom:13px; }
 
   /* ===== MAIN ===== */
-  main{ padding:0 clamp(22px,5vw,64px); max-width:880px; width:100%; }
+  main{ padding-top:var(--topbar); min-height:100vh; }
+  .wrap{ padding:0 clamp(22px,5vw,64px); max-width:880px; width:100%; margin:0 auto; }
 
-  .hero{ position:relative; padding:110px 0 30px; isolation:isolate; }
+  .view{ display:none; }
+  .view.active{ display:block; }
+  .fadein{ opacity:0; transform:translateY(10px); animation:fadeUp .5s cubic-bezier(.2,.8,.2,1) forwards; }
+  @keyframes fadeUp{ to{ opacity:1; transform:none; } }
+
+  /* ===== HOME ===== */
+  .hero{ position:relative; padding:76px 0 36px; isolation:isolate; }
   .blob{
     position:absolute; z-index:-1; width:360px; height:360px; border-radius:50%; filter:blur(60px);
     background:radial-gradient(circle, var(--accent-soft) 0%, transparent 70%);
@@ -73,17 +107,29 @@
   .greet{ font-size:1.05rem; color:var(--accent); font-weight:600; height:1.6em; display:flex; align-items:center; }
   .greet span{ display:inline-block; transition:opacity .25s, transform .25s; }
   .greet span.out{ opacity:0; transform:translateY(6px); }
-  .hero h1{ font-size:clamp(2.5rem,7vw,4rem); font-weight:700; letter-spacing:-.035em; line-height:1.05; margin-top:6px; }
-  .hero-tagline { margin-top: 19px; font-size: 1rem; color: var(--muted); line-height: 1.6; max-width: 50ch; }
-  .hint{ margin-top:22px; font-size:.82rem; color:var(--muted); display:flex; align-items:center; gap:8px; }
-  .hint svg{ width:14px; height:14px; animation:bob 1.8s ease-in-out infinite; }
-  @keyframes bob{ 50%{ transform:translateY(4px); } }
+  .hero h1{ font-size:clamp(2.3rem,7vw,3.6rem); font-weight:700; letter-spacing:-.035em; line-height:1.05; margin-top:6px; }
+  .hero-tagline{ margin-top:16px; font-size:1rem; color:var(--muted); line-height:1.6; max-width:50ch; }
 
-  /* ===== SECTIONS ===== */
-  .sec{ scroll-margin-top:var(--offset); padding-top:64px; }
-  .reveal{ opacity:0; transform:translateY(16px); transition:opacity .7s ease, transform .7s cubic-bezier(.2,.8,.2,1); }
-  .reveal.in{ opacity:1; transform:none; }
-  .sec-head{ margin-bottom:22px; }
+  /* quick-access cards on home */
+  .quick-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-top:36px; }
+  .quick-card{
+    text-align:left; padding:16px 18px; border-radius:14px; background:var(--surface); border:1px solid var(--line);
+    transition:transform .2s, border-color .2s; cursor:pointer;
+  }
+  .quick-card:hover{ transform:translateY(-3px); border-color:var(--accent); }
+  .quick-card .qn{ font-size:.66rem; color:var(--accent); font-weight:700; letter-spacing:1px; }
+  .quick-card .qt{ font-size:.92rem; font-weight:600; margin-top:5px; }
+  .quick-card .qd{ font-size:.76rem; color:var(--muted); margin-top:3px; }
+
+  footer{ padding:56px 0 40px; color:var(--muted); font-size:.78rem; }
+
+  /* ===== SECTION VIEWS ===== */
+  .sec-head{ margin:48px 0 22px; }
+  .sec-head .back{
+    display:inline-flex; align-items:center; gap:6px; font-size:.78rem; color:var(--accent); font-weight:600;
+    margin-bottom:16px; padding:4px 0;
+  }
+  .sec-head .back:hover{ text-decoration:underline; text-underline-offset:3px; }
   .sec-head .sec-n{ font-size:.7rem; color:var(--accent); font-weight:700; letter-spacing:1.5px; }
   .sec-head h2{ font-size:1.65rem; font-weight:650; letter-spacing:-.025em; margin-top:4px; }
   .sec-head p{ color:var(--muted); font-size:.88rem; margin-top:4px; }
@@ -98,7 +144,6 @@
   .fact .k{ font-size:.7rem; color:var(--muted); letter-spacing:.4px; }
   .fact .v{ font-size:.95rem; font-weight:600; margin-top:4px; }
 
-  /* chips */
   .group + .group{ margin-top:22px; }
   .group-label{ font-size:.72rem; color:var(--muted); font-weight:600; letter-spacing:.8px; text-transform:uppercase; margin-bottom:10px; }
   .chips{ display:flex; flex-wrap:wrap; gap:8px; }
@@ -107,12 +152,9 @@
     font-size:.84rem; transition:all .2s; cursor:default;
   }
   .chip:hover{ background:var(--accent-soft); border-color:var(--accent); color:var(--accent); transform:translateY(-2px); }
-
-  /* link chips (creative work) */
   .chip-link{ color:var(--accent); border-color:var(--accent); cursor:pointer; }
   .chip-link:hover{ background:var(--accent); color:var(--on-accent); }
 
-  /* toolbar + filters */
   .toolbar{ display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; gap:10px; }
   .link-btn{ font-size:.8rem; color:var(--accent); font-weight:600; padding:6px 2px; }
   .link-btn:hover{ text-decoration:underline; text-underline-offset:3px; }
@@ -121,7 +163,6 @@
   .fbtn:hover{ color:var(--ink); border-color:var(--accent); }
   .fbtn.active{ background:var(--accent); border-color:var(--accent); color:var(--on-accent); font-weight:600; }
 
-  /* projects */
   .proj-grid{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; align-items:start; }
   .proj{ transition:transform .25s, border-color .25s; }
   .proj:hover{ transform:translateY(-3px); border-color:var(--accent); }
@@ -135,29 +176,21 @@
   .proj-body > div{ overflow:hidden; }
   .proj-body p{ padding:0 20px 18px; font-size:.86rem; color:var(--muted); line-height:1.7; }
 
-  /* timeline */
   .timeline{ list-style:none; position:relative; padding-left:32px; }
-  .timeline::before{
-    content:""; position:absolute; left:15px; top:8px; bottom:8px; width:2px; background:var(--line);
-  }
+  .timeline::before{ content:""; position:absolute; left:15px; top:8px; bottom:8px; width:2px; background:var(--line); }
   .timeline::after{
     content:""; position:absolute; left:15px; top:8px; bottom:8px; width:2px; background:var(--accent);
-    transform:scaleY(0); transform-origin:top; transition:transform 1.4s cubic-bezier(.2,.8,.2,1);
+    transform:scaleY(1); transform-origin:top;
   }
-  .reveal.in .timeline::after{ transform:scaleY(1); }
   .tl{ position:relative; padding:0 0 28px; }
   .tl:last-child{ padding-bottom:0; }
-  .tl::before{
-    content:""; position:absolute; left:-25px; top:6px; width:14px; height:14px; border-radius:50%;
-    background:var(--bg); border:2px solid var(--accent);
-  }
+  .tl::before{ content:""; position:absolute; left:-25px; top:6px; width:14px; height:14px; border-radius:50%; background:var(--bg); border:2px solid var(--accent); }
   .tl:first-child::before{ background:var(--accent); }
   .tl-date{ font-size:.74rem; color:var(--accent); font-weight:600; }
   .tl-role{ font-size:1rem; font-weight:600; margin-top:3px; line-height:1.4; }
   .tl-org{ font-size:.84rem; color:var(--muted); margin-top:3px; line-height:1.55; }
   .tl-desc{ font-size:.82rem; color:var(--muted); margin-top:6px; line-height:1.6; max-width:55ch; }
 
-  /* rows */
   .row{ display:flex; justify-content:space-between; gap:16px; padding:15px 0; border-bottom:1px solid var(--line); align-items:baseline; }
   .row:last-child{ border-bottom:none; }
   .row .t{ font-size:.92rem; line-height:1.45; }
@@ -176,105 +209,80 @@
   .more{ display:block; margin:16px auto 6px; padding:10px 20px; border:1px solid var(--line); border-radius:999px; font-size:.82rem; background:var(--surface); transition:all .2s; }
   .more:hover{ border-color:var(--accent); color:var(--accent); }
 
-  /* languages */
   .lang{ padding:22px; }
   .lang h3{ font-size:1.05rem; font-weight:600; }
   .lang p{ font-size:.84rem; color:var(--muted); margin-top:6px; line-height:1.6; }
   .levels{ display:flex; gap:6px; margin-top:16px; }
-  .levels i{ width:34px; height:6px; border-radius:3px; background:var(--accent); transform-origin:left; transform:scaleX(0); transition:transform .6s cubic-bezier(.2,.8,.2,1); }
-  .reveal.in .levels i{ transform:scaleX(1); }
-  .reveal.in .levels i:nth-child(2){ transition-delay:.15s; }
-  .reveal.in .levels i:nth-child(3){ transition-delay:.3s; }
+  .levels i{ width:34px; height:6px; border-radius:3px; background:var(--accent); }
 
   .note{ padding:26px; background:var(--accent-soft); border-color:transparent; box-shadow:none; }
   .note p{ font-size:.98rem; line-height:1.85; max-width:60ch; }
 
-  footer{ padding:70px 0 44px; color:var(--muted); font-size:.78rem; }
-
-  /* ===== MOBILE ===== */
-  @media (max-width:900px){
-    :root{ --offset:132px; }
-    .shell{ display:block; }
-    .side{
-      position:sticky; top:0; z-index:60; height:auto; padding:12px max(16px,env(safe-area-inset-left)) 10px;
-      border-right:none; border-bottom:1px solid var(--line);
-      background:color-mix(in srgb, var(--bg) 88%, transparent);
-      -webkit-backdrop-filter:blur(12px); backdrop-filter:blur(12px);
-      display:grid; grid-template-columns:1fr; grid-template-areas:"brand" "nav"; gap:10px; align-items:center;
-    }
-    .brand{ grid-area:brand; gap:11px; }
-    .avatar{ width:38px; height:38px; font-size:.82rem; }
-    .b-name{ font-size:.92rem; }
-    .b-role{ font-size:.7rem; }
-    .nav{
-      grid-area:nav; margin:0; flex-direction:row; gap:6px; overflow-x:auto; overflow-y:hidden;
-      scrollbar-width:none; -webkit-overflow-scrolling:touch; padding-bottom:2px;
-    }
-    .nav::-webkit-scrollbar{ display:none; }
-    .nav a{ white-space:nowrap; padding:7px 14px; border-radius:999px; background:var(--surface); border:1px solid var(--line); font-size:.8rem; }
-    .nav a .n{ display:none; }
-    .nav a.active{ background:var(--accent); border-color:var(--accent); color:var(--on-accent); }
-    main{ padding:0 max(20px,env(safe-area-inset-left)); }
-    .hero{ padding-top:60px; }
-    .blob{ width:260px; height:260px; }
-  }
-  @media (max-width:700px){
-    .proj-grid{ grid-template-columns:1fr; }
-  }
   @media (max-width:520px){
     .facts{ grid-template-columns:1fr; }
+    .quick-grid{ grid-template-columns:1fr; }
+    .proj-grid{ grid-template-columns:1fr; }
     .row{ flex-direction:column; gap:4px; }
     .row .d{ white-space:normal; }
     .tl-role{ font-size:.95rem; }
+    .tb-crumb{ display:none; }
   }
 
   @media (prefers-reduced-motion:reduce){
-    html{ scroll-behavior:auto; }
     *{ animation:none !important; transition-duration:.001s !important; }
-    .reveal{ opacity:1; transform:none; }
   }
 </style>
 </head>
 <body>
 
-<div class="progress"><i id="bar"></i></div>
-
-<div class="shell">
-  <aside class="side">
-    <div class="brand">
-      <div class="avatar" aria-hidden="true">SR</div>
-      <div>
-        <div class="b-name">Sri Ram Gupta</div>
-        <div class="b-role">Edison Engineer · GE Vernova</div>
-      </div>
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false">
+    <span class="bars"><i></i><i></i><i></i></span>
+  </button>
+  <div class="tb-brand" id="brandHome">
+    <div class="avatar" aria-hidden="true">SR</div>
+    <div>
+      <div class="tb-name">Sri Ram Gupta</div>
+      <div class="tb-role">Edison Engineer · GE Vernova</div>
     </div>
-    <nav class="nav" id="nav" aria-label="Sections"></nav>
-  </aside>
+  </div>
+  <div class="tb-crumb" id="crumb"></div>
+</header>
 
-  <main>
-    <section class="hero" id="top">
-      <div class="blob" id="blob"></div>
-      <div class="greet"><span id="greet">Hello, I'm</span></div>
-      <h1>Sri Ram Gupta</h1>
-      <!-- <div class="hint">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M6 13l6 6 6-6"/></svg>
-      </div> -->
-      <p class="hero-tagline">engineer by profession, nerd at heart; trying to be a jack of all trades and hopefully a master of some?</p>
+<div class="scrim" id="scrim"></div>
+
+<aside class="drawer" id="drawer">
+  <div class="drawer-nav" id="drawerNav"></div>
+</aside>
+
+<main>
+  <div class="wrap">
+
+    <!-- ===== HOME VIEW (minimal — swap in real content later) ===== -->
+    <section class="view active" id="view-home">
+      <div class="hero" id="heroBox">
+        <div class="blob" id="blob"></div>
+        <div class="greet"><span id="greet">Hello, I'm</span></div>
+        <h1>Sri Ram Gupta</h1>
+        <p class="hero-tagline">engineer by profession, nerd at heart; trying to be a jack of all trades and hopefully a master of some?</p>
+      </div>
+
+      <div class="quick-grid" id="quickGrid"></div>
+
+      <footer>Sri Ram Gupta · <span id="yr"></span></footer>
     </section>
 
-    <div id="sections"></div>
+    <!-- ===== SECTION VIEWS (generated) ===== -->
+    <div id="sectionViews"></div>
 
-    <footer>Sri Ram Gupta · <span id="yr"></span></footer>
-  </main>
-</div>
+  </div>
+</main>
 
 <script>
 document.getElementById('yr').textContent = new Date().getFullYear();
 const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 function formatDesc(text){
-  return esc(text)
-    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')  // **bold**
-    .replace(/\n/g, '<br>');                            // line breaks
+  return esc(text).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
 }
 const reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -290,25 +298,17 @@ if(!reduce){
 }
 
 /* ===== HERO GLOW FOLLOWS POINTER ===== */
-const hero = document.getElementById('top');
+const heroBox = document.getElementById('heroBox');
 const blob = document.getElementById('blob');
 if(!reduce){
-  hero.addEventListener('pointermove', e=>{
-    const r = hero.getBoundingClientRect();
+  heroBox.addEventListener('pointermove', e=>{
+    const r = heroBox.getBoundingClientRect();
     blob.style.setProperty('--bx', ((e.clientX - r.left)/r.width*100) + '%');
     blob.style.setProperty('--by', ((e.clientY - r.top)/r.height*100) + '%');
   });
 }
 
-/* ===== SCROLL PROGRESS ===== */
-const bar = document.getElementById('bar');
-function onScroll(){
-  const h = document.documentElement.scrollHeight - innerHeight;
-  bar.style.transform = `scaleX(${h>0 ? Math.min(1, scrollY/h) : 0})`;
-}
-addEventListener('scroll', onScroll, {passive:true}); onScroll();
-
-/* ===== SECTIONS ===== */
+/* ===== STATIONS / CATEGORIES ===== */
 const stations = [
   { id:"overview", name:"Overview", desc:"Who, what, where" },
   { id:"skills", name:"Skills", desc:"Languages, tools, platforms, creative work" },
@@ -322,49 +322,104 @@ const stations = [
   { id:"note", name:"Note", desc:"How to reach out" },
 ];
 
-const nav = document.getElementById('nav');
-const sectionsEl = document.getElementById('sections');
-const bodies = {};
+/* ===== BUILD DRAWER NAV ===== */
+const drawerNav = document.getElementById('drawerNav');
+const homeLink = document.createElement('a');
+homeLink.href = '#home'; homeLink.className = 'home-link'; homeLink.dataset.view = 'home';
+homeLink.innerHTML = `<span class="n">—</span>Home`;
+drawerNav.appendChild(homeLink);
 
 stations.forEach((s,i)=>{
   const num = String(i+1).padStart(2,'0');
   const a = document.createElement('a');
-  a.href = '#'+s.id;
+  a.href = '#'+s.id; a.dataset.view = s.id;
   a.innerHTML = `<span class="n">${num}</span>${s.name}`;
-  nav.appendChild(a);
-
-  const sec = document.createElement('section');
-  sec.className = 'sec reveal';
-  sec.id = s.id;
-  sec.innerHTML = `<div class="sec-head"><span class="sec-n">${num}</span><h2>${s.name}</h2><p>${s.desc}</p></div><div class="sec-body"></div>`;
-  sectionsEl.appendChild(sec);
-  bodies[s.id] = sec.querySelector('.sec-body');
+  drawerNav.appendChild(a);
 });
 
-/* scrollspy */
-const links = [...nav.querySelectorAll('a')];
-const mobileMQ = matchMedia('(max-width:900px)');
-function setActive(id){
-  links.forEach(l=>{
-    const on = l.getAttribute('href')==='#'+id;
-    l.classList.toggle('active', on);
-    if(on){ l.setAttribute('aria-current','true'); } else { l.removeAttribute('aria-current'); }
-    if(on && mobileMQ.matches){
-      nav.scrollTo({ left: l.offsetLeft - nav.clientWidth/2 + l.clientWidth/2, behavior: reduce ? 'auto' : 'smooth' });
-    }
-  });
-}
-setActive('overview');
-const spy = new IntersectionObserver(es=>{
-  es.forEach(e=>{ if(e.isIntersecting) setActive(e.target.id); });
-},{ rootMargin:'-30% 0px -60% 0px' });
-document.querySelectorAll('.sec').forEach(s=> spy.observe(s));
+/* ===== BUILD SECTION VIEWS (hidden pages) ===== */
+const sectionViews = document.getElementById('sectionViews');
+const bodies = {};
+stations.forEach((s,i)=>{
+  const num = String(i+1).padStart(2,'0');
+  const view = document.createElement('section');
+  view.className = 'view';
+  view.id = 'view-'+s.id;
+  view.innerHTML = `
+    <div class="sec-head">
+      <a href="#home" class="back" data-view="home">&larr; Home</a>
+      <span class="sec-n">${num}</span>
+      <h2>${s.name}</h2>
+      <p>${s.desc}</p>
+    </div>
+    <div class="sec-body"></div>`;
+  sectionViews.appendChild(view);
+  bodies[s.id] = view.querySelector('.sec-body');
+});
 
-/* reveal on scroll */
-const rev = new IntersectionObserver(es=>{
-  es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); rev.unobserve(e.target); } });
-},{ rootMargin:'0px 0px -6% 0px' });
-document.querySelectorAll('.reveal').forEach(el=> reduce ? el.classList.add('in') : rev.observe(el));
+/* ===== QUICK-ACCESS CARDS ON HOME ===== */
+const quickGrid = document.getElementById('quickGrid');
+stations.forEach((s,i)=>{
+  const num = String(i+1).padStart(2,'0');
+  const card = document.createElement('button');
+  card.className = 'quick-card';
+  card.dataset.view = s.id;
+  card.innerHTML = `<div class="qn">${num}</div><div class="qt">${s.name}</div><div class="qd">${s.desc}</div>`;
+  quickGrid.appendChild(card);
+});
+
+/* ===== VIEW SWITCHING ===== */
+const allViews = () => [document.getElementById('view-home'), ...stations.map(s=> document.getElementById('view-'+s.id))];
+const crumb = document.getElementById('crumb');
+
+function showView(id){
+  allViews().forEach(v=> v.classList.remove('active'));
+  const target = id === 'home' ? document.getElementById('view-home') : document.getElementById('view-'+id);
+  if(!target) return;
+  target.classList.add('active');
+  target.classList.remove('fadein');
+  requestAnimationFrame(()=> target.classList.add('fadein'));
+
+  // update drawer active state
+  drawerNav.querySelectorAll('a').forEach(a=>{
+    a.classList.toggle('active', a.dataset.view === id);
+  });
+
+  // breadcrumb
+  if(id === 'home'){ crumb.innerHTML = ''; }
+  else {
+    const st = stations.find(s=> s.id === id);
+    crumb.innerHTML = `Home / <strong>${esc(st ? st.name : id)}</strong>`;
+  }
+
+  window.scrollTo({ top:0, behavior: reduce ? 'auto' : 'smooth' });
+  closeDrawer();
+  history.replaceState(null, '', id==='home' ? '#home' : '#'+id);
+}
+
+/* click delegation for any element with data-view (drawer links, quick cards, back links) */
+document.addEventListener('click', e=>{
+  const el = e.target.closest('[data-view]');
+  if(el){ e.preventDefault(); showView(el.dataset.view); }
+});
+document.getElementById('brandHome').addEventListener('click', ()=> showView('home'));
+
+/* ===== DRAWER OPEN/CLOSE ===== */
+const menuBtn = document.getElementById('menuBtn');
+const drawer = document.getElementById('drawer');
+const scrim = document.getElementById('scrim');
+function openDrawer(){ drawer.classList.add('open'); scrim.classList.add('show'); menuBtn.classList.add('open'); menuBtn.setAttribute('aria-expanded','true'); }
+function closeDrawer(){ drawer.classList.remove('open'); scrim.classList.remove('show'); menuBtn.classList.remove('open'); menuBtn.setAttribute('aria-expanded','false'); }
+menuBtn.addEventListener('click', ()=> drawer.classList.contains('open') ? closeDrawer() : openDrawer());
+scrim.addEventListener('click', closeDrawer);
+document.addEventListener('keydown', e=>{ if(e.key === 'Escape') closeDrawer(); });
+
+/* initial route from hash */
+(function initRoute(){
+  const h = location.hash.replace('#','');
+  const valid = stations.some(s=> s.id === h);
+  showView(valid ? h : 'home');
+})();
 
 /* ===== DATA ===== */
 const projects = [
@@ -381,12 +436,7 @@ const projects = [
 ];
 
 const experienceData = [
-  { 
-    date:"Jul 2026 – Present", 
-    role:"Edison Engineer — Gas Power Engineering", 
-    org:"GE Vernova, HTC, India",
-    desc:"Rotation 1: Controls Platform Software Developement (Q3-Q4 '26)" 
-  },
+  { date:"Jul 2026 – Present", role:"Edison Engineer — Gas Power Engineering", org:"GE Vernova, HTC, India", desc:"Rotation 1: Controls Platform Software Developement (Q3-Q4 '26)" },
 ];
 const educationData = [
   { date:"2024 – 2026", role:"M.Tech, Industrial Power & Automation", org:"NIT Calicut · CGPA 9.88/10 · Gold Medalist" },
@@ -494,7 +544,7 @@ function makeFilters(container, cats, onPick){
   container.appendChild(row);
 }
 
-/* ===== 01 OVERVIEW ===== */
+/* ===== OVERVIEW ===== */
 bodies.overview.innerHTML = `
   <div class="facts">
     <div class="fact"><div class="k">Current role</div><div class="v">Edison Engineer, GE Vernova</div></div>
@@ -503,7 +553,7 @@ bodies.overview.innerHTML = `
     <div class="fact"><div class="k">Interests</div><div class="v">Controls · Robotics · Power</div></div>
   </div>`;
 
-/* ===== 02 SKILLS ===== */
+/* ===== SKILLS ===== */
 const skillGroups = [
   ["Languages", ["C","C#","Python"]],
   ["Tools", ["MATLAB","LabVIEW","ROS2","Gazebo"]],
@@ -522,7 +572,7 @@ bodies.skills.innerHTML = skillGroups.map(([label, items]) =>
   ).join('')}</div></div>`
 ).join('');
 
-/* ===== 03 PROJECTS ===== */
+/* ===== PROJECTS ===== */
 (function(){
   const c = bodies.projects;
   const tb = document.createElement('div');
@@ -563,7 +613,7 @@ bodies.skills.innerHTML = skillGroups.map(([label, items]) =>
   });
 })();
 
-/* ===== 04 EXPERIENCE & 05 EDUCATION ===== */
+/* ===== EXPERIENCE & EDUCATION ===== */
 const renderTimeline = data => `<ol class="timeline">${data.map(t=>`
   <li class="tl">
     <div class="tl-date">${esc(t.date)}</div>
@@ -571,15 +621,15 @@ const renderTimeline = data => `<ol class="timeline">${data.map(t=>`
     <div class="tl-org">${esc(t.org)}</div>
     ${t.desc ? `<div class="tl-desc">${formatDesc(t.desc)}</div>` : ''}
   </li>`).join('')}</ol>`;
-  
+
 bodies.experience.innerHTML = renderTimeline(experienceData);
 bodies.education.innerHTML  = renderTimeline(educationData);
 
-/* ===== 06 CERTIFICATIONS ===== */
+/* ===== CERTIFICATIONS ===== */
 bodies.certifications.innerHTML = `<div class="card pad">${certs.map(c=>`
   <div class="row"><div><div class="t">${esc(c.title)}</div><div class="s">${esc(c.issuer)}</div></div><div class="d">${esc(c.date)}</div></div>`).join('')}</div>`;
 
-/* ===== 07 ACHIEVEMENTS ===== */
+/* ===== ACHIEVEMENTS ===== */
 (function(){
   const c = bodies.achievements;
   const list = document.createElement('div');
@@ -593,7 +643,7 @@ bodies.certifications.innerHTML = `<div class="card pad">${certs.map(c=>`
   render('All');
 })();
 
-/* ===== 08 ACTIVITIES ===== */
+/* ===== ACTIVITIES ===== */
 (function(){
   const c = bodies.activities;
   const PAGE = 12;
@@ -627,7 +677,7 @@ bodies.certifications.innerHTML = `<div class="card pad">${certs.map(c=>`
   render();
 })();
 
-/* ===== 09 LANGUAGES ===== */
+/* ===== LANGUAGES ===== */
 bodies.languages.innerHTML = `
   <div class="card lang">
     <h3>German — Level 3 of 6</h3>
@@ -636,7 +686,7 @@ bodies.languages.innerHTML = `
     <div class="levels"><i></i><i></i><i></i></div>
   </div>`;
 
-/* ===== 10 NOTE ===== */
+/* ===== NOTE ===== */
 bodies.note.innerHTML = `
   <div class="card note"><p>This page purposely has no contact information because I prefer mystery. If you really need to find me, you'll have to try the old-fashioned way: manifest it into the universe and hope it works.</p></div>`;
 </script>
