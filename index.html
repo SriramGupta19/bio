@@ -19,7 +19,7 @@
     --on-accent:#0d1211;
     --shadow:0 1px 2px rgba(0,0,0,.3), 0 10px 28px -14px rgba(0,0,0,.5);
     --sans:-apple-system,BlinkMacSystemFont,'Segoe UI','Inter','Roboto','Helvetica Neue',Arial,sans-serif;
-    --side:280px;
+    --side:clamp(220px,18vw,300px);
     --offset:28px;
   }
 
@@ -36,7 +36,7 @@
   .progress i{ display:block; height:100%; background:var(--accent); transform:scaleX(0); transform-origin:left; }
 
   /* ===== SHELL ===== */
-  .shell{ display:grid; grid-template-columns:var(--side) minmax(0,1fr); min-height:100vh; }
+  .shell{ display:grid; grid-template-columns:var(--side) minmax(0,1fr); min-height:100vh; width:100%; max-width:1800px; margin:0 auto; }
 
   /* ===== SIDEBAR ===== */
   .side{
@@ -61,7 +61,7 @@
   .nav a.active{ background:var(--accent-soft); color:var(--accent); font-weight:600; }
 
   /* ===== MAIN ===== */
-  main{ padding:0 clamp(22px,5vw,64px); max-width:880px; width:100%; }
+  main{ padding:0 clamp(22px,4vw,64px); max-width:1320px; width:100%; margin:0 auto; }
 
   .hero{ position:relative; padding:110px 0 30px; isolation:isolate; }
   .blob{
@@ -73,8 +73,8 @@
   .greet{ font-size:1.05rem; color:var(--accent); font-weight:600; height:1.6em; display:flex; align-items:center; }
   .greet span{ display:inline-block; transition:opacity .25s, transform .25s; }
   .greet span.out{ opacity:0; transform:translateY(6px); }
-  .hero h1{ font-size:clamp(2.5rem,7vw,4rem); font-weight:700; letter-spacing:-.035em; line-height:1.05; margin-top:6px; }
-  .hero-tagline { margin-top: 19px; font-size: 1rem; color: var(--muted); line-height: 1.6; max-width: 50ch; }
+  .hero h1{ font-size:clamp(2.5rem,6vw,4.4rem); font-weight:700; letter-spacing:-.035em; line-height:1.05; margin-top:6px; }
+  .hero-tagline { margin-top: 19px; font-size: 1rem; color: var(--muted); line-height: 1.6; max-width: 62ch; }
   .hint{ margin-top:22px; font-size:.82rem; color:var(--muted); display:flex; align-items:center; gap:8px; }
   .hint svg{ width:14px; height:14px; animation:bob 1.8s ease-in-out infinite; }
   @keyframes bob{ 50%{ transform:translateY(4px); } }
@@ -92,7 +92,7 @@
   .pad{ padding:6px 22px; }
 
   .lead{ font-size:1.08rem; line-height:1.75; color:var(--ink); max-width:62ch; }
-  .facts{ display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-top:24px; }
+  .facts{ display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px; margin-top:24px; }
   .fact{ padding:16px 18px; border-radius:14px; background:var(--surface); border:1px solid var(--line); transition:transform .25s, border-color .25s; }
   .fact:hover{ transform:translateY(-3px); border-color:var(--accent); }
   .fact .k{ font-size:.7rem; color:var(--muted); letter-spacing:.4px; }
@@ -113,7 +113,7 @@
   .chip-link:hover{ background:var(--accent); color:var(--on-accent); }
 
   /* toolbar + filters */
-  .toolbar{ display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; gap:10px; }
+  .toolbar{ display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; gap:10px; flex-wrap:wrap; }
   .link-btn{ font-size:.8rem; color:var(--accent); font-weight:600; padding:6px 2px; }
   .link-btn:hover{ text-decoration:underline; text-underline-offset:3px; }
   .filters{ display:flex; gap:7px; flex-wrap:wrap; margin-bottom:16px; }
@@ -122,7 +122,7 @@
   .fbtn.active{ background:var(--accent); border-color:var(--accent); color:var(--on-accent); font-weight:600; }
 
   /* projects */
-  .proj-grid{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; align-items:start; }
+  .proj-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:14px; align-items:start; }
   .proj{ transition:transform .25s, border-color .25s; }
   .proj:hover{ transform:translateY(-3px); border-color:var(--accent); }
   .proj-head{ width:100%; text-align:left; padding:18px 20px; display:grid; grid-template-columns:1fr auto; gap:6px 12px; align-items:start; }
@@ -136,7 +136,7 @@
   .proj-body p{ padding:0 20px 18px; font-size:.86rem; color:var(--muted); line-height:1.7; }
 
   /* timeline */
-  .timeline{ list-style:none; position:relative; padding-left:32px; }
+  .timeline{ list-style:none; position:relative; padding-left:32px; max-width:900px; }
   .timeline::before{
     content:""; position:absolute; left:15px; top:8px; bottom:8px; width:2px; background:var(--line);
   }
@@ -155,7 +155,7 @@
   .tl-date{ font-size:.74rem; color:var(--accent); font-weight:600; }
   .tl-role{ font-size:1rem; font-weight:600; margin-top:3px; line-height:1.4; }
   .tl-org{ font-size:.84rem; color:var(--muted); margin-top:3px; line-height:1.55; }
-  .tl-desc{ font-size:.82rem; color:var(--muted); margin-top:6px; line-height:1.6; max-width:55ch; }
+  .tl-desc{ font-size:.82rem; color:var(--muted); margin-top:6px; line-height:1.6; max-width:65ch; }
 
   /* rows */
   .row{ display:flex; justify-content:space-between; gap:16px; padding:15px 0; border-bottom:1px solid var(--line); align-items:baseline; }
@@ -164,6 +164,10 @@
   .row .s{ font-size:.76rem; color:var(--muted); margin-top:3px; }
   .row .d{ font-size:.78rem; color:var(--muted); white-space:nowrap; }
   .tag{ display:inline-block; font-size:.66rem; padding:2px 9px; border-radius:999px; background:var(--accent-soft); color:var(--accent); font-weight:600; margin-bottom:6px; }
+
+  /* multi-column lists for wide screens */
+  .pad.multi{ column-gap:32px; }
+  .pad.multi .row{ break-inside:avoid-column; }
 
   .search{
     width:100%; padding:13px 16px; border-radius:14px; border:1px solid var(--line); background:var(--surface);
@@ -177,6 +181,7 @@
   .more:hover{ border-color:var(--accent); color:var(--accent); }
 
   /* languages */
+  .lang-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:16px; }
   .lang{ padding:22px; }
   .lang h3{ font-size:1.05rem; font-weight:600; }
   .lang p{ font-size:.84rem; color:var(--muted); margin-top:6px; line-height:1.6; }
@@ -186,10 +191,26 @@
   .reveal.in .levels i:nth-child(2){ transition-delay:.15s; }
   .reveal.in .levels i:nth-child(3){ transition-delay:.3s; }
 
-  .note{ padding:26px; background:var(--accent-soft); border-color:transparent; box-shadow:none; }
-  .note p{ font-size:.98rem; line-height:1.85; max-width:60ch; }
+  
+  .note{ 
+  padding:32px 36px; 
+  background:var(--accent-soft); 
+  border-color:transparent; 
+  box-shadow:none; 
+  max-width:100%;          /* constrain the card itself */
+}
+  .note p{ font-size:.98rem; line-height:1.85; }
 
   footer{ padding:70px 0 44px; color:var(--muted); font-size:.78rem; }
+
+  /* ===== WIDE DESKTOP ENHANCEMENTS ===== */
+  @media (min-width:1300px){
+    .pad.multi{ column-count:2; }
+  }
+  @media (min-width:1600px){
+    :root{ --side:300px; }
+    main{ max-width:1500px; }
+  }
 
   /* ===== MOBILE ===== */
   @media (max-width:900px){
@@ -214,12 +235,14 @@
     .nav a{ white-space:nowrap; padding:7px 14px; border-radius:999px; background:var(--surface); border:1px solid var(--line); font-size:.8rem; }
     .nav a .n{ display:none; }
     .nav a.active{ background:var(--accent); border-color:var(--accent); color:var(--on-accent); }
-    main{ padding:0 max(20px,env(safe-area-inset-left)); }
+    main{ padding:0 max(20px,env(safe-area-inset-left)); max-width:100%; }
     .hero{ padding-top:60px; }
     .blob{ width:260px; height:260px; }
+    .pad.multi{ column-count:1; }
   }
   @media (max-width:700px){
     .proj-grid{ grid-template-columns:1fr; }
+    .facts{ grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); }
   }
   @media (max-width:520px){
     .facts{ grid-template-columns:1fr; }
@@ -256,9 +279,6 @@
       <div class="blob" id="blob"></div>
       <div class="greet"><span id="greet">Hello, I'm</span></div>
       <h1>Sri Ram Gupta</h1>
-      <!-- <div class="hint">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M6 13l6 6 6-6"/></svg>
-      </div> -->
       <p class="hero-tagline">engineer by profession, nerd at heart; trying to be a jack of all trades and hopefully a master of some?</p>
     </section>
 
@@ -273,8 +293,8 @@ document.getElementById('yr').textContent = new Date().getFullYear();
 const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 function formatDesc(text){
   return esc(text)
-    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')  // **bold**
-    .replace(/\n/g, '<br>');                            // line breaks
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\n/g, '<br>');
 }
 const reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -576,14 +596,14 @@ bodies.experience.innerHTML = renderTimeline(experienceData);
 bodies.education.innerHTML  = renderTimeline(educationData);
 
 /* ===== 06 CERTIFICATIONS ===== */
-bodies.certifications.innerHTML = `<div class="card pad">${certs.map(c=>`
+bodies.certifications.innerHTML = `<div class="card pad multi">${certs.map(c=>`
   <div class="row"><div><div class="t">${esc(c.title)}</div><div class="s">${esc(c.issuer)}</div></div><div class="d">${esc(c.date)}</div></div>`).join('')}</div>`;
 
 /* ===== 07 ACHIEVEMENTS ===== */
 (function(){
   const c = bodies.achievements;
   const list = document.createElement('div');
-  list.className = 'card pad';
+  list.className = 'card pad multi';
   function render(f){
     list.innerHTML = achievements.filter(a=> f==='All' || a.cat===f).map(a=>`
       <div class="row"><div><span class="tag">${esc(a.cat)}</span><div class="t">${esc(a.title)}</div><div class="s">${esc(a.org)}</div></div></div>`).join('');
@@ -596,7 +616,7 @@ bodies.certifications.innerHTML = `<div class="card pad">${certs.map(c=>`
 /* ===== 08 ACTIVITIES ===== */
 (function(){
   const c = bodies.activities;
-  const PAGE = 12;
+  const PAGE = 16;
   let shown = PAGE, activeCat = 'All';
 
   const search = document.createElement('input');
@@ -606,7 +626,7 @@ bodies.certifications.innerHTML = `<div class="card pad">${certs.map(c=>`
   makeFilters(c, ["All", ...new Set(ec.map(e=>e.cat))], cat=>{ activeCat = cat; shown = PAGE; render(); });
 
   const count = document.createElement('div'); count.className = 'count';
-  const list = document.createElement('div'); list.className = 'card pad';
+  const list = document.createElement('div'); list.className = 'card pad multi';
   const more = document.createElement('button'); more.className = 'more';
   c.appendChild(count); c.appendChild(list); c.appendChild(more);
 
@@ -629,11 +649,13 @@ bodies.certifications.innerHTML = `<div class="card pad">${certs.map(c=>`
 
 /* ===== 09 LANGUAGES ===== */
 bodies.languages.innerHTML = `
-  <div class="card lang">
-    <h3>German — Level 3 of 6</h3>
-    <p>Vivekananda Institute of Languages, Ramakrishna Math, Hyderabad · Jun 2024 – Apr 2025</p>
-    <p style="margin-top:4px">Grades: Level 1 — A+ · Level 2 — A+ · Level 3 — A+</p>
-    <div class="levels"><i></i><i></i><i></i></div>
+  <div class="lang-grid">
+    <div class="card lang">
+      <h3>German — Level 3 of 6</h3>
+      <p>Vivekananda Institute of Languages, Ramakrishna Math, Hyderabad · Jun 2024 – Apr 2025</p>
+      <p style="margin-top:4px">Grades: Level 1 — A+ · Level 2 — A+ · Level 3 — A+</p>
+      <div class="levels"><i></i><i></i><i></i></div>
+    </div>
   </div>`;
 
 /* ===== 10 NOTE ===== */
