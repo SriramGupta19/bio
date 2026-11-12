@@ -12,7 +12,7 @@
     --surface:#1a1e1d;
     --soft:#222726;
     --ink:#eceeed;
-    --muted:#98a09c;
+    --muted:#a9b3ae; /* CHANGED: brightened from #98a09c for better WCAG contrast */
     --line:#2b3130;
     --accent:#74c7b1;
     --accent-soft:#1d2d29;
@@ -51,7 +51,25 @@
   .b-name{ font-weight:650; font-size:1rem; letter-spacing:-.01em; }
   .b-role{ font-size:.76rem; color:var(--muted); margin-top:2px; }
 
-  .nav{ margin-top:38px; display:flex; flex-direction:column; gap:2px; flex:1; overflow-y:auto; }
+  /* NEW: contact icon row + resume button */
+  .side-links{ display:flex; gap:8px; margin-top:20px; }
+  .side-link{
+    width:36px; height:36px; border-radius:10px; display:grid; place-items:center;
+    background:var(--surface); border:1px solid var(--line); color:var(--muted);
+    transition:all .2s;
+  }
+  .side-link:hover{ background:var(--accent-soft); border-color:var(--accent); color:var(--accent); transform:translateY(-2px); }
+  .side-link svg{ width:16px; height:16px; }
+
+  .btn-resume{
+    margin-top:14px; padding:10px 14px; border-radius:12px; background:var(--accent); color:var(--on-accent);
+    font-size:.82rem; font-weight:650; text-align:center; transition:transform .2s, opacity .2s;
+    display:flex; align-items:center; justify-content:center; gap:8px;
+  }
+  .btn-resume:hover{ transform:translateY(-2px); opacity:.92; }
+  .btn-resume svg{ width:14px; height:14px; }
+
+  .nav{ margin-top:30px; display:flex; flex-direction:column; gap:2px; flex:1; overflow-y:auto; }
   .nav a{
     display:flex; align-items:center; gap:12px; padding:9px 12px; border-radius:10px;
     font-size:.88rem; color:var(--muted); transition:background .2s, color .2s;
@@ -63,7 +81,7 @@
   /* ===== MAIN ===== */
   main{ padding:0 clamp(22px,4vw,64px); max-width:1320px; width:100%; margin:0 auto; }
 
-  .hero{ position:relative; padding:110px 0 30px; isolation:isolate; }
+  .hero{ position:relative; padding:110px 0 3px; isolation:isolate; }
   .blob{
     position:absolute; z-index:-1; width:360px; height:360px; border-radius:50%; filter:blur(60px);
     background:radial-gradient(circle, var(--accent-soft) 0%, transparent 70%);
@@ -78,6 +96,18 @@
   .hint{ margin-top:22px; font-size:.82rem; color:var(--muted); display:flex; align-items:center; gap:8px; }
   .hint svg{ width:14px; height:14px; animation:bob 1.8s ease-in-out infinite; }
   @keyframes bob{ 50%{ transform:translateY(4px); } }
+
+  /* NEW: hero quick-action links */
+  .hero-links{ display:flex; gap:10px; margin-top:26px; flex-wrap:wrap; }
+  .hero-link{
+    display:flex; align-items:center; gap:8px; padding:9px 16px; border-radius:999px;
+    background:var(--surface); border:1px solid var(--line); font-size:.84rem; color:var(--ink);
+    transition:all .2s;
+  }
+  .hero-link:hover{ border-color:var(--accent); color:var(--accent); transform:translateY(-2px); }
+  .hero-link svg{ width:14px; height:14px; }
+  .hero-link.primary{ background:var(--accent); color:var(--on-accent); border-color:var(--accent); font-weight:600; }
+  .hero-link.primary:hover{ opacity:.92; color:var(--on-accent); }
 
   /* ===== SECTIONS ===== */
   .sec{ scroll-margin-top:var(--offset); padding-top:64px; }
@@ -134,6 +164,13 @@
   .proj.open .proj-body{ grid-template-rows:1fr; }
   .proj-body > div{ overflow:hidden; }
   .proj-body p{ padding:0 20px 18px; font-size:.86rem; color:var(--muted); line-height:1.7; }
+  /* NEW: project link row */
+  .proj-link{
+    display:inline-flex; align-items:center; gap:6px; margin:0 20px 18px; padding:7px 14px;
+    border-radius:999px; background:var(--accent-soft); color:var(--accent); font-size:.78rem; font-weight:600;
+    transition:all .2s;
+  }
+  .proj-link:hover{ background:var(--accent); color:var(--on-accent); }
 
   /* timeline */
   .timeline{ list-style:none; position:relative; padding-left:32px; max-width:900px; }
@@ -154,8 +191,9 @@
   .tl:first-child::before{ background:var(--accent); }
   .tl-date{ font-size:.74rem; color:var(--accent); font-weight:600; }
   .tl-role{ font-size:1rem; font-weight:600; margin-top:3px; line-height:1.4; }
-  .tl-org{ font-size:.84rem; color:var(--muted); margin-top:3px; line-height:1.55; }
-  .tl-desc{ font-size:.82rem; color:var(--muted); margin-top:6px; line-height:1.6; max-width:65ch; }
+  .tl-org a{ color:var(--accent); text-decoration:none; }
+  .tl-org a:hover{ text-decoration:underline; text-underline-offset:2px; }
+  .tl-desc{ font-size:.62rem; color:var(--muted); margin-top:6px; line-height:1.6; max-width:65ch; }
 
   /* rows */
   .row{ display:flex; justify-content:space-between; gap:16px; padding:15px 0; border-bottom:1px solid var(--line); align-items:baseline; }
@@ -200,6 +238,15 @@
   max-width:100%;          /* constrain the card itself */
 }
   .note p{ font-size:.98rem; line-height:1.85; }
+  /* NEW: contact row inside note */
+  .note-contact{ display:flex; gap:10px; margin-top:20px; flex-wrap:wrap; }
+  .note-contact a{
+    display:flex; align-items:center; gap:8px; padding:9px 16px; border-radius:999px;
+    background:var(--surface); border:1px solid var(--line); font-size:.84rem; font-weight:600; color:var(--ink);
+    transition:all .2s;
+  }
+  .note-contact a:hover{ border-color:var(--accent); color:var(--accent); transform:translateY(-2px); }
+  .note-contact svg{ width:14px; height:14px; }
 
   footer{ padding:70px 0 44px; color:var(--muted); font-size:.78rem; }
 
@@ -227,6 +274,7 @@
     .avatar{ width:38px; height:38px; font-size:.82rem; }
     .b-name{ font-size:.92rem; }
     .b-role{ font-size:.7rem; }
+    .side-links, .btn-resume{ display:none; } /* keep mobile header compact; links live in hero instead */
     .nav{
       grid-area:nav; margin:0; flex-direction:row; gap:6px; overflow-x:auto; overflow-y:hidden;
       scrollbar-width:none; -webkit-overflow-scrolling:touch; padding-bottom:2px;
@@ -271,6 +319,26 @@
         <div class="b-role">Edison Engineer · GE Vernova</div>
       </div>
     </div>
+
+    <!-- NEW: sidebar contact icons -->
+    <!-- <div class="side-links">
+      <a class="side-link" href="mailto:YOUR_EMAIL@example.com" aria-label="Email" title="Email">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M22 6l-10 7L2 6"/></svg>
+      </a>
+      <a class="side-link" href="https://linkedin.com/in/YOUR_LINKEDIN" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" title="LinkedIn">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5C4.98 4.88 3.88 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8h4V24h-4V8zm7 0h3.8v2.2h.05c.53-1 1.84-2.2 3.8-2.2 4.07 0 4.82 2.68 4.82 6.17V24h-4v-7.9c0-1.88-.03-4.3-2.63-4.3-2.63 0-3.03 2.06-3.03 4.18V24h-4V8z"/></svg>
+      </a>
+      <a class="side-link" href="https://github.com/YOUR_GITHUB" target="_blank" rel="noopener noreferrer" aria-label="GitHub" title="GitHub">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.73.5.5 5.73.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.3.8-.6v-2.2c-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.7 1.3 3.4 1 .1-.7.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.4 11.4 0 016 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.7.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A11.5 11.5 0 0023.5 12C23.5 5.73 18.27.5 12 .5z"/></svg>
+      </a>
+    </div> -->
+
+    <!-- NEW: resume download button
+    <a class="btn-resume" href="YOUR_RESUME_FILE.pdf" download>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16"/></svg>
+      Download Resume
+    </a> -->
+
     <nav class="nav" id="nav" aria-label="Sections"></nav>
   </aside>
 
@@ -280,6 +348,25 @@
       <div class="greet"><span id="greet">Hello, I'm</span></div>
       <h1>Sri Ram Gupta</h1>
       <p class="hero-tagline">engineer by profession, nerd at heart; trying to be a jack of all trades and hopefully a master of some?</p>
+
+      <!-- <div class="hero-links">
+        <a class="hero-link primary" href="mailto:YOUR_EMAIL@example.com">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M22 6l-10 7L2 6"/></svg>
+          Email Me
+        </a>
+        <a class="hero-link" href="https://linkedin.com/in/YOUR_LINKEDIN" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5C4.98 4.88 3.88 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8h4V24h-4V8zm7 0h3.8v2.2h.05c.53-1 1.84-2.2 3.8-2.2 4.07 0 4.82 2.68 4.82 6.17V24h-4v-7.9c0-1.88-.03-4.3-2.63-4.3-2.63 0-3.03 2.06-3.03 4.18V24h-4V8z"/></svg>
+          LinkedIn
+        </a>
+        <a class="hero-link" href="https://github.com/YOUR_GITHUB" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.73.5.5 5.73.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.3.8-.6v-2.2c-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.7 1.3 3.4 1 .1-.7.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.4 11.4 0 016 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.7.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A11.5 11.5 0 0023.5 12C23.5 5.73 18.27.5 12 .5z"/></svg>
+          GitHub
+        </a>
+        <a class="hero-link" href="YOUR_RESUME_FILE.pdf" download>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16"/></svg>
+          Resume
+        </a>
+      </div> -->
     </section>
 
     <div id="sections"></div>
@@ -387,32 +474,37 @@ const rev = new IntersectionObserver(es=>{
 document.querySelectorAll('.reveal').forEach(el=> reduce ? el.classList.add('in') : rev.observe(el));
 
 /* ===== DATA ===== */
+/* NEW: optional "link" field added to each project. Fill in real URLs (GitHub repo, demo, writeup, etc.) 
+   Leave as null/omit the field if there's nothing to link to — the UI will simply not render a link for that project. */
 const projects = [
-  { title:"Adaptive Heterogeneous Multi-Robot Coordination and Control", date:"Jan 2025 – Jun 2026", desc:"M.Tech major project — leader-follower coordination strategy for two heterogeneous mobile robots, handling system uncertainties in multi-robot missions." },
-  { title:"AI-Enabled Safety Interlock System for Two-Wheelers", date:"Jan 2026 – Feb 2026", desc:"Qualcomm & Arduino 'AI for All' challenge entry — CV-based helmet detection on Arduino UNO Q, blocking ignition if a rider isn't wearing a helmet." },
-  { title:"Color-based Object Sorting System", date:"Apr 2025 – May 2025", desc:"Automated classification using a color sensor to sort objects into corresponding containers." },
-  { title:"Smart Residential Energy Management", date:"Nov 2024 – Dec 2024", desc:"App-controlled load shedding with real-time source switching and backup time estimation." },
-  { title:"Preliminary Energy Audit — Morbido Vinyl Pvt. Ltd.", date:"Nov 2024", desc:"Energy audit of a footwear manufacturing facility (9,200 pairs/day) to identify efficiency gains." },
-  { title:"SCADA for a Smart Microgrid", date:"Sep 2023 – May 2024", desc:"B.Tech major project — SCADA implementation with real-time monitoring and predictive energy management." },
-  { title:"Overload Protection of Induction Motor", date:"Oct 2023 – Nov 2023", desc:"NodeMCU ESP8266 and cloud app for monitoring and protecting single-phase induction motors." },
-  { title:"Smart Irrigation System", date:"Mar 2023 – May 2023", desc:"IoT-based automated irrigation using NodeMCU ESP8266 to reduce water wastage." },
-  { title:"Color Sense Bot", date:"Apr 2023 – May 2023", desc:"3-wheel robot using PIC16F877A and TCS3200 sensor, responding to color cards." },
-  { title:"Live-in-Labs: Infrastructure at Dalapur, UP", date:"Feb 2023 – Aug 2023", desc:"Rural development initiative using Participatory Rural Appraisal (PRA) tools." },
+  { title:"Adaptive Heterogeneous Multi-Robot Coordination and Control", date:"Jan 2025 – Jun 2026", desc:"M.Tech major project — leader-follower coordination strategy for two heterogeneous mobile robots, handling system uncertainties in multi-robot missions.", link:null },
+  { title:"AI-Enabled Safety Interlock System for Two-Wheelers", date:"Jan 2026 – Feb 2026", desc:"Qualcomm & Arduino 'AI for All' challenge entry — CV-based helmet detection on Arduino UNO Q, blocking ignition if a rider isn't wearing a helmet.", link:"https://github.com/YOUR_GITHUB/YOUR_REPO" },
+  { title:"Color-based Object Sorting System", date:"Apr 2025 – May 2025", desc:"Automated classification using a color sensor to sort objects into corresponding containers.", link:null },
+  { title:"Smart Residential Energy Management", date:"Nov 2024 – Dec 2024", desc:"App-controlled load shedding with real-time source switching and backup time estimation.", link:null },
+  { title:"Preliminary Energy Audit — Morbido Vinyl Pvt. Ltd.", date:"Nov 2024", desc:"Energy audit of a footwear manufacturing facility (9,200 pairs/day) to identify efficiency gains.", link:null },
+  { title:"SCADA for a Smart Microgrid", date:"Sep 2023 – May 2024", desc:"B.Tech major project — SCADA implementation with real-time monitoring and predictive energy management.", link:null },
+  { title:"Overload Protection of Induction Motor", date:"Oct 2023 – Nov 2023", desc:"NodeMCU ESP8266 and cloud app for monitoring and protecting single-phase induction motors.", link:null },
+  { title:"Smart Irrigation System", date:"Mar 2023 – May 2023", desc:"IoT-based automated irrigation using NodeMCU ESP8266 to reduce water wastage.", link:null },
+  { title:"Color Sense Bot", date:"Apr 2023 – May 2023", desc:"3-wheel robot using PIC16F877A and TCS3200 sensor, responding to color cards.", link:null },
+  { title:"Live-in-Labs: Infrastructure at Dalapur, UP", date:"Feb 2023 – Aug 2023", desc:"Rural development initiative using Participatory Rural Appraisal (PRA) tools.", link:null },
 ];
 
+/* NEW: optional "url" field added to org for Experience/Education — fill in to make org names clickable */
 const experienceData = [
   { 
     date:"Jul 2026 – Present", 
     role:"Edison Engineer — Gas Power Engineering", 
-    org:"GE Vernova, HTC, India",
+    orgLabel:"GE Vernova", 
+    orgRest:", HTC, India",
+    url:"https://www.gevernova.com/",
     desc:"Rotation 1: Controls Platform Software Developement (H2 '26)" 
   },
 ];
 const educationData = [
-  { date:"2024 – 2026", role:"M.Tech, Industrial Power & Automation", org:"NIT Calicut · CGPA 9.88/10 · Gold Medalist" },
-  { date:"2020 – 2024", role:"B.Tech, Electrical and Electronics Engineering", org:"Amrita School of Engineering · CGPA 9.47/10 · Gold Medalist, Best Outgoing Student" },
-  { date:"Jun 2020", role:"Higher Secondary Certificate", org:"FIITJEE Junior College, Hyderabad · 91.4%" },
-  { date:"May 2018", role:"Secondary School Certificate", org:"St. Joseph's School, Hyderabad · 87%" },
+  { date:"2024 – 2026", role:"M.Tech, Industrial Power & Automation", orgLabel:"NIT Calicut", orgRest:" · CGPA 9.88/10 · Gold Medalist", url:"https://nitc.ac.in/" },
+  { date:"2020 – 2024", role:"B.Tech, Electrical and Electronics Engineering", orgLabel:"Amrita School of Engineering", orgRest:" · CGPA 9.47/10 · Gold Medalist, Best Outgoing Student", url:"https://www.amrita.edu/" },
+  { date:"Jun 2020", role:"Higher Secondary Certificate", orgLabel:"FIITJEE Junior College, Hyderabad", orgRest:" · 91.4%", url:null },
+  { date:"May 2018", role:"Secondary School Certificate", orgLabel:"St. Joseph's School, Hyderabad", orgRest:" · 87%", url:null },
 ];
 
 const certs = [
@@ -518,8 +610,8 @@ function makeFilters(container, cats, onPick){
 bodies.overview.innerHTML = `
   <div class="facts">
     <div class="fact"><div class="k">Current role</div><div class="v">Edison Engineer, GE Vernova</div></div>
-    <div class="fact"><div class="k">Master of Technology</div><div class="v">NIT Calicut</div></div>
-    <div class="fact"><div class="k">Bachelor of Technology</div><div class="v">Amrita Vishwa Vidyapeetham</div></div>
+    <div class="fact"><div class="k">Master of Technology</div><div class="v">National Institute of Technology Calicut</div></div>
+    <div class="fact"><div class="k">Bachelor of Technology</div><div class="v">Amrita Vishwa Vidyapeetham, Coimbatore</div></div>
     <div class="fact"><div class="k">Interests</div><div class="v">Controls · Robotics · Power</div></div>
   </div>`;
 
@@ -539,7 +631,7 @@ bodies.skills.innerHTML = skillGroups.map(([label, items]) =>
   `<div class="group"><div class="group-label">${label}</div><div class="chips">${items.map(x =>
     typeof x === 'string'
       ? `<span class="chip">${esc(x)}</span>`
-      : `<a class="chip chip-link" href="${x.url}" target="_blank" rel="noopener noreferrer">${esc(x.label)} ↗</a>`
+      : `<a class="chip chip-link" href="${x.url}" target="_blank" rel="noopener noreferrer">${esc(x.label)}</a>`
   ).join('')}</div></div>`
 ).join('');
 
@@ -562,7 +654,10 @@ bodies.skills.innerHTML = skillGroups.map(([label, items]) =>
         <span class="proj-title">${esc(p.title)}</span>
         <span class="proj-icon" aria-hidden="true">+</span>
       </button>
-      <div class="proj-body"><div><p>${esc(p.desc)}</p></div></div>`;
+      <div class="proj-body"><div>
+        <p>${esc(p.desc)}</p>
+        ${p.link ? `<a class="proj-link" href="${p.link}" target="_blank" rel="noopener noreferrer">View Code / Demo ↗</a>` : ''}
+      </div></div>`;
     const btn = el.querySelector('.proj-head');
     btn.addEventListener('click', ()=>{
       const open = el.classList.toggle('open');
@@ -589,10 +684,10 @@ const renderTimeline = data => `<ol class="timeline">${data.map(t=>`
   <li class="tl">
     <div class="tl-date">${esc(t.date)}</div>
     <div class="tl-role">${esc(t.role)}</div>
-    <div class="tl-org">${esc(t.org)}</div>
+    <div class="tl-org">${t.url ? `<a href="${t.url}" target="_blank" rel="noopener noreferrer">${esc(t.orgLabel)}</a>${esc(t.orgRest)}` : esc(t.orgLabel) + esc(t.orgRest)}</div>
     ${t.desc ? `<div class="tl-desc">${formatDesc(t.desc)}</div>` : ''}
   </li>`).join('')}</ol>`;
-  
+
 bodies.experience.innerHTML = renderTimeline(experienceData);
 bodies.education.innerHTML  = renderTimeline(educationData);
 
@@ -660,8 +755,26 @@ bodies.languages.innerHTML = `
   </div>`;
 
 /* ===== 10 NOTE ===== */
+/* UPDATED: kept the humor, but added real, functional contact options right below it */
 bodies.note.innerHTML = `
-  <div class="card note"><p>This page purposely has no contact information because I prefer mystery. If you really need to find me, you'll have to try the old-fashioned way: manifest it into the universe and hope it works.</p></div>`;
+  <div class="card note">
+    <p>This page purposely has no contact information because I prefer mystery. If you really need to find me, you'll have to try the old-fashioned way: manifest it into the universe and hope it works.</p>
+    <p style="margin-top:14px; font-size:.84rem; color:var(--muted)">...or, you know, just use one of these instead:</p>
+    <div class="note-contact">
+      <a href="mailto:w.sriramgupta@gmail.com">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M22 6l-10 7L2 6"/></svg>
+        Email
+      </a>
+      <a href="https://www.linkedin.com/in/sriram-gupta-m/" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5C4.98 4.88 3.88 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8h4V24h-4V8zm7 0h3.8v2.2h.05c.53-1 1.84-2.2 3.8-2.2 4.07 0 4.82 2.68 4.82 6.17V24h-4v-7.9c0-1.88-.03-4.3-2.63-4.3-2.63 0-3.03 2.06-3.03 4.18V24h-4V8z"/></svg>
+        LinkedIn
+      </a>
+      <a href="https://github.com/SriramGupta19" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.73.5.5 5.73.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.3.8-.6v-2.2c-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.7 1.3 3.4 1 .1-.7.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.4 11.4 0 016 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.7.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A11.5 11.5 0 0023.5 12C23.5 5.73 18.27.5 12 .5z"/></svg>
+        GitHub
+      </a>
+    </div>
+  </div>`;
 </script>
 
 </body>
